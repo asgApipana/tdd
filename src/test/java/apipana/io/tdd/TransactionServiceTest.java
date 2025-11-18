@@ -80,4 +80,16 @@ class TransactionServiceTest {
         assertEquals(200, third.getAmount());
         assertEquals(250, third.getBalance());
     }
+
+    @Test
+    void testGetBalance() {
+        TransactionService transactionService = new TransactionService();
+        String iban = "ES0000001";
+        long initialBalance = 0;
+        long depositFee = 100;
+        transactionService.deposit(iban, depositFee);
+        double balanceAfterDeposit = transactionService.getBalance(iban);
+        assertEquals(initialBalance + depositFee, balanceAfterDeposit);
+    }
+
 }
