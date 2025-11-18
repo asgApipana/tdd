@@ -2,6 +2,8 @@ package apipana.io.tdd;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TransactionServiceTest {
@@ -47,5 +49,35 @@ class TransactionServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testGetTransactionLog() {
+        TransactionService transactionService = new TransactionService();
+        String iban = "ES0000001";
+        // Creating transactions
+        transactionService.deposit(iban, 1000);
+        transactionService.withdraw(iban, 950);
+        transactionService.deposit(iban, 200);
+        List<BankTransaction> transactions = transactionService.getAccountStatements(iban);
+
+        //Tests for each transaction
+        BankTransaction first = transactions.get(0);
+        assertEquals("deposit", first.getOperation());
+        assertEquals(iban, first.getIBAN());
+        assertEquals(1000, first.getAmount());
+        assertEquals(1000, first.getBalance());
+
+        BankTransaction second = transactions.get(1);
+        assertEquals("withdraw", second.getOperation());
+        assertEquals(iban, second.getIBAN());
+        assertEquals(950, second.getAmount());
+        assertEquals(50, second.getBalance());
+
+        BankTransaction third = transactions.get(2);
+        assertEquals("deposit", third.getOperation());
+        assertEquals(iban, third.getIBAN());
+        assertEquals(200, third.getAmount());
+        assertEquals(250, third.getBalance());
     }
 }
