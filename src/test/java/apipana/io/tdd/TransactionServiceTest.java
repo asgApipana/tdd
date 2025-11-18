@@ -16,4 +16,17 @@ class TransactionServiceTest {
         double balanceAfterDeposit = transactionService.getBalance(iban);
         assertEquals(initialBalance + depositFee, balanceAfterDeposit);
     }
+
+    @Test
+    void testWithdrawFundsIfAvailable(){
+        TransactionService transactionService = new TransactionService();
+        String iban = "ES0000001";
+        double initialBalance = 100;
+        double withdrawAmount = 10;
+        // Creating account
+        transactionService.deposit(iban, initialBalance);
+        transactionService.withdraw(iban, withdrawAmount);
+        double balanceAfterWithDraw = transactionService.getBalance(iban);
+        assertEquals(initialBalance - withdrawAmount, balanceAfterWithDraw);
+    }
 }

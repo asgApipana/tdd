@@ -11,8 +11,14 @@ public class TransactionService {
         this.accounts = HashMap.newHashMap(1024);
     }
 
-    public long withdraw() {
-        return 1;
+    public boolean withdraw(String IBAN, double amount) {
+        double balance = accounts.get(IBAN);
+        if (balance >= amount) {
+            accounts.put(IBAN, balance - amount);
+            return true;
+        }
+
+        return false;
     }
 
     public void deposit(String IBAN, double amount) {
