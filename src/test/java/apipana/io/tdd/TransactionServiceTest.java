@@ -29,4 +29,23 @@ class TransactionServiceTest {
         double balanceAfterWithDraw = transactionService.getBalance(iban);
         assertEquals(initialBalance - withdrawAmount, balanceAfterWithDraw);
     }
+
+    @Test
+    void testCannotWithdrawMoreThanAvailableBalance(){
+        String iban = "ES0000001";
+        double initialBalance = 100;
+        double withdrawAmount = 200;
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            // Creating account
+            TransactionService transactionService = new TransactionService();
+            transactionService.deposit(iban, initialBalance);
+            transactionService.withdraw(iban, withdrawAmount);
+        });
+
+        String expectedMessage = "Insufficient funds";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 }

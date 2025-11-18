@@ -18,7 +18,7 @@ public class TransactionService {
             return true;
         }
 
-        return false;
+        throw new RuntimeException("Insufficient funds");
     }
 
     public void deposit(String IBAN, double amount) {
